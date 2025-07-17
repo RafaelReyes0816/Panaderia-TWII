@@ -52,13 +52,6 @@ Este proyecto es un sistema de gestión para una panadería, desarrollado en Lar
 
 ---
 
-### ¿Qué significa esto para el README?
-
-Puedes aclarar en el README (si lo deseas) que el proyecto es solo la base de datos y la lógica de modelos, y que **no hay interfaz gráfica ni endpoints web implementados**.  
-Así, quien lo use sabrá que debe trabajar desde la consola y no esperar ver una aplicación web en el navegador.
-
----
-
 ```markdown
 > **Nota:**  
 > Este proyecto solo incluye la estructura de base de datos (migraciones), modelos Eloquent, factories y seeders.  
