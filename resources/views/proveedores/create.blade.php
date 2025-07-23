@@ -15,9 +15,9 @@
             @error('telefono') <div class="text-danger">{{ $message }}</div> @enderror
         </div>
         <div class="mb-3">
-            <label class="form-label">Email:</label>
-            <input type="email" name="email" value="{{ old('email') }}" class="form-control">
-            @error('email') <div class="text-danger">{{ $message }}</div> @enderror
+            <label class="form-label">Contacto:</label>
+            <input type="text" name="contacto" value="{{ old('contacto') }}" class="form-control">
+            @error('contacto') <div class="text-danger">{{ $message }}</div> @enderror
         </div>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>

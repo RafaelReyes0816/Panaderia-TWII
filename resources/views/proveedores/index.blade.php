@@ -25,6 +25,7 @@
                     <th>Nombre</th>
                     <th>Teléfono</th>
                     <th>Dirección</th>
+                    <th>Contacto</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -35,6 +36,7 @@
                         <td>{{ $proveedor->nombre }}</td>
                         <td>{{ $proveedor->telefono }}</td>
                         <td>{{ $proveedor->direccion }}</td>
+                        <td>{{ $proveedor->contacto }}</td>
                         <td>
                             <a href="{{ route('proveedores.edit', $proveedor->id) }}" class="btn btn-warning btn-sm">Editar</a>
                             <form action="{{ route('proveedores.destroy', $proveedor->id) }}" method="POST" style="display:inline;">
@@ -46,7 +48,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center">No hay proveedores registrados.</td>
+                        <td colspan="6" class="text-center">No hay proveedores registrados.</td>
                     </tr>
                 @endforelse
             </tbody>

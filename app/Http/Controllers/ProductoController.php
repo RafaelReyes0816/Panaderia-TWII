@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Producto;
+use App\Models\Inventario;
 
 class ProductoController extends Controller
 {
@@ -43,7 +44,18 @@ class ProductoController extends Controller
             $validated['imagen'] = $ruta;
         }
 
-        Producto::create($validated);
+        $producto = Producto::create($validated);
+
+        // Registrar entrada en inventario si el stock inicial es mayor a 0
+        if ($producto->stock > 0) {
+            Inventario::create([
+                'producto_id' => $producto->id,
+                'tipo_movimiento' => 'entrada',
+                'cantidad' => $producto->stock,
+                'fecha' => now(),
+                'observacion' => 'Alta de producto',
+            ]);
+        }
 
         return redirect()->route('productos.index')->with('success', 'Producto creado correctamente.');
     }

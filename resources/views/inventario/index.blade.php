@@ -29,7 +29,13 @@
                     <tr>
                         <td>{{ ($inventario->currentPage() - 1) * $inventario->perPage() + $loop->iteration }}</td>
                         <td>{{ $item->producto->nombre ?? '' }}</td>
-                        <td>{{ ucfirst($item->tipo_movimiento) }}</td>
+                        <td>
+                            @if($item->tipo_movimiento === 'entrada')
+                                <span class="badge bg-success">Entrada</span>
+                            @else
+                                <span class="badge bg-danger">Salida</span>
+                            @endif
+                        </td>
                         <td>{{ $item->cantidad }}</td>
                         <td>{{ $item->fecha }}</td>
                         <td>{{ $item->observacion }}</td>
