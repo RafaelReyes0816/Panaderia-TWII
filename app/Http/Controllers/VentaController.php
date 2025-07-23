@@ -9,9 +9,15 @@ use App\Models\Cliente;
 class VentaController extends Controller
 {
     //Lista de ventas
-    public function index()
+    public function index(Request $request)
     {
-        $ventas = Venta::with('cliente')->get();
+        $query = \App\Models\Venta::with('cliente');
+        if ($request->filled('buscar')) {
+            $query->whereHas('cliente', function($q) use ($request) {
+                $q->where('nombre', 'like', '%' . $request->buscar . '%');
+            });
+        }
+        $ventas = $query->orderByDesc('fecha')->paginate(5)->withQueryString();
         return view('ventas.index', compact('ventas'));
     }
 

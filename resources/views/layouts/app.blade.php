@@ -2,9 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Panadería TWII</title>
+    <title>Panadería</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     @stack('styles')
     <style>
@@ -77,13 +76,15 @@
 <body>
     <header class="p-3 mb-4">
         <div class="container">
-            <h1>Panadería TWII</h1>
+            <h1>Panadería</h1>
             <nav>
                 <a class="btn btn-light me-2" href="{{ url('/') }}">Inicio</a>
                 <a class="btn btn-light me-2" href="{{ route('productos.index') }}">Productos</a>
                 <a class="btn btn-light me-2" href="{{ route('proveedores.index') }}">Proveedores</a>
                 <a class="btn btn-light me-2" href="{{ route('compras.index') }}">Compras</a>
                 <a class="btn btn-light" href="{{ route('ventas.index') }}">Ventas</a>
+                <a class="btn btn-light" href="{{ route('clientes.index') }}">Clientes</a>
+                <a class="btn btn-light" href="{{ route('inventario.index') }}">Inventario</a>
             </nav>
         </div>
     </header>
@@ -93,8 +94,10 @@
     </main>
 
     <footer class="text-center py-3">
-        <p>&copy; {{ date('Y') }} Panadería TWII. Todos los derechos reservados.</p>
+        <p>&copy; {{ date('Y') }} Panadería. Todos los derechos reservados.</p>
     </footer>
     @stack('scripts')
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

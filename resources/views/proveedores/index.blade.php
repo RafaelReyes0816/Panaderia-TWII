@@ -1,35 +1,58 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1 class="mb-4">Listado de Proveedores</h1>
-    <a href="{{ route('proveedores.create') }}" class="btn btn-success mb-3">Crear Proveedor</a>
-    <table class="table table-striped table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Teléfono</th>
-                <th>Dirección</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($proveedores as $proveedor)
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Proveedores</h2>
+        <a href="{{ route('proveedores.create') }}" class="btn btn-success">Crear Proveedor</a>
+    </div>
+
+    <form method="GET" action="{{ route('proveedores.index') }}" class="mb-3">
+        <div class="input-group" style="max-width: 350px;">
+            <input type="text" name="buscar" class="form-control" placeholder="Buscar por nombre..." value="{{ request('buscar') }}">
+            <button class="btn btn-primary" type="submit">Buscar</button>
+        </div>
+    </form>
+
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle" style="padding: 1rem;">
+            <thead class="table-dark">
                 <tr>
-                    <td>{{ $proveedor->id }}</td>
-                    <td>{{ $proveedor->nombre }}</td>
-                    <td>{{ $proveedor->telefono }}</td>
-                    <td>{{ $proveedor->direccion }}</td>
-                    <td>
-                        <a href="{{ route('proveedores.edit', $proveedor->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                        <form action="{{ route('proveedores.destroy', $proveedor->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                        </form>
-                    </td>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Dirección</th>
+                    <th>Acciones</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @forelse($proveedores as $proveedor)
+                    <tr>
+                        <td>{{ ($proveedores->currentPage() - 1) * $proveedores->perPage() + $loop->iteration }}</td>
+                        <td>{{ $proveedor->nombre }}</td>
+                        <td>{{ $proveedor->telefono }}</td>
+                        <td>{{ $proveedor->direccion }}</td>
+                        <td>
+                            <a href="{{ route('proveedores.edit', $proveedor->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                            <form action="{{ route('proveedores.destroy', $proveedor->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center">No hay proveedores registrados.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    <div class="d-flex justify-content-center">
+        {{ $proveedores->links('pagination::bootstrap-5') }}
+    </div>
 @endsection 

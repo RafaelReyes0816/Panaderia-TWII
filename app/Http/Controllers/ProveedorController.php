@@ -8,9 +8,13 @@ use App\Models\Proveedor;
 class ProveedorController extends Controller
 {
     //Lista de proveedores
-    public function index()
+    public function index(Request $request)
     {
-        $proveedores = Proveedor::all();
+        $query = \App\Models\Proveedor::query();
+        if ($request->filled('buscar')) {
+            $query->where('nombre', 'like', '%' . $request->buscar . '%');
+        }
+        $proveedores = $query->orderBy('nombre')->paginate(5)->withQueryString();
         return view('proveedores.index', compact('proveedores'));
     }
 

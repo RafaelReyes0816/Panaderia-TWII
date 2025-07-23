@@ -8,10 +8,16 @@ use App\Models\Proveedor;
 
 class CompraController extends Controller
 {
-    //Lista de compras
-    public function index()
+    //tabla de compras
+    public function index(Request $request)
     {
-        $compras = Compra::with('proveedor')->get();
+        $query = \App\Models\Compra::with('proveedor');
+        if ($request->filled('buscar')) {
+            $query->whereHas('proveedor', function($q) use ($request) {
+                $q->where('nombre', 'like', '%' . $request->buscar . '%');
+            });
+        }
+        $compras = $query->orderByDesc('fecha')->paginate(5)->withQueryString();
         return view('compras.index', compact('compras'));
     }
 

@@ -9,9 +9,13 @@ class ProductoController extends Controller
 {
 
     //Lista de productos
-    public function index()
+    public function index(Request $request)
     {
-        $productos = Producto::all();
+        $query = \App\Models\Producto::query();
+        if ($request->filled('buscar')) {
+            $query->where('nombre', 'like', '%' . $request->buscar . '%');
+        }
+        $productos = $query->orderBy('nombre')->paginate(5)->withQueryString();
         return view('productos.index', compact('productos'));
     }
 
