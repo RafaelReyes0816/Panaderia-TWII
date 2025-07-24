@@ -85,7 +85,7 @@
                 <a class="btn btn-light" href="{{ route('ventas.index') }}">Ventas</a>
                 <a class="btn btn-light" href="{{ route('clientes.index') }}">Clientes</a>
                 <a class="btn btn-light" href="{{ route('inventario.index') }}">Inventario</a>
-                <a class="btn btn-light" href="{{ route('detalles.index') }}">Detalles</a>
+                <a class="btn btn-light" href="{{ route('detalles.index') }}">Reportes</a>
             </nav>
         </div>
     </header>
