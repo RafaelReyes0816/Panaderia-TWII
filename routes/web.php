@@ -14,12 +14,11 @@ use App\Models\DetalleVenta;
 use App\Models\DetalleCompra;
 
 
-// Inicio
 Route::get('/', function () {
     return view('inicio.index');
 })->name('inicio');
 
-// Ruta de productos
+//Ruta de productos
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
 Route::get('/productos/crear', [ProductoController::class, 'create'])->name('productos.create');
 Route::post('/productos', [ProductoController::class, 'store'])->name('productos.store');
@@ -28,7 +27,7 @@ Route::put('/productos/{id}', [ProductoController::class, 'update'])->name('prod
 Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])->name('productos.destroy');
 
 
-// Ruta deproveedores
+//Ruta deproveedores
 Route::get('/proveedores', [ProveedorController::class, 'index'])->name('proveedores.index');
 Route::get('/proveedores/crear', [ProveedorController::class, 'create'])->name('proveedores.create');
 Route::post('/proveedores', [ProveedorController::class, 'store'])->name('proveedores.store');
@@ -55,7 +54,7 @@ Route::put('/ventas/{id}', [VentaController::class, 'update'])->name('ventas.upd
 Route::delete('/ventas/{id}', [VentaController::class, 'destroy'])->name('ventas.destroy');
 
 
-// Rutas de clientes
+//Rutas de clientes
 Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
 Route::get('/clientes/crear', [ClienteController::class, 'create'])->name('clientes.create');
 Route::post('/clientes', [ClienteController::class, 'store'])->name('clientes.store');

@@ -4,6 +4,7 @@
     <div class="text-center py-5">
         <h1 class="display-4 mb-4">¡Bienvenido!</h1>
         <p class="lead mb-4">Sistema de gestión para administrar productos, clientes, proveedores, compras y ventas de tu panadería.</p>
+        
         <div id="bannerCarrusel" class="carousel slide mb-5" data-bs-ride="carousel">
             <div class="carousel-inner rounded shadow">
                 <div class="carousel-item active">
@@ -23,5 +24,6 @@
                 <span class="carousel-control-next-icon"></span>
             </button>
         </div>
+        
     </div>
 @endsection 

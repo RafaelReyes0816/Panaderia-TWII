@@ -101,7 +101,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!productoId || !productosData[productoId]) return;
         const existente = productosVenta.find(p => p.id == productoId);
         if (existente) {
-            //Mensaje de error
             let alerta = document.getElementById('alerta-producto');
             alerta.textContent = '¡Este producto ya fue agregado!';
             alerta.classList.remove('d-none');
