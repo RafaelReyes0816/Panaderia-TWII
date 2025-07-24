@@ -10,6 +10,9 @@ use App\Http\Controllers\DetalleVentaController;
 use App\Http\Controllers\DetalleCompraController;
 use App\Http\Controllers\InventarioController;
 
+use App\Models\DetalleVenta;
+use App\Models\DetalleCompra;
+
 
 // Inicio
 Route::get('/', function () {
@@ -68,3 +71,15 @@ Route::get('/inventario', [InventarioController::class, 'index'])->name('inventa
 
 Route::get('detalle-compras', [DetalleCompraController::class, 'index'])->name('detalle-compras.index');
 Route::get('detalle-ventas', [DetalleVentaController::class, 'index'])->name('detalle-ventas.index');
+
+Route::get('/detalles', function (\Illuminate\Http\Request $request) {
+    $tipo = $request->query('tipo', 'venta');
+    $detallesVenta = collect();
+    $detallesCompra = collect();
+    if ($tipo === 'venta') {
+        $detallesVenta = \App\Models\DetalleVenta::paginate(5);
+    } elseif ($tipo === 'compra') {
+        $detallesCompra = \App\Models\DetalleCompra::paginate(5);
+    }
+    return view('detalles', compact('detallesVenta', 'detallesCompra'));
+})->name('detalles.index');
