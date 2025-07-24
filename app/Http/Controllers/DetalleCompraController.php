@@ -9,7 +9,7 @@ use App\Models\Producto;
 
 class DetalleCompraController extends Controller
 {
-    //Lista de detalles de compra
+    //Lista
     public function index()
     {
         $detalles = DetalleCompra::with(['compra', 'producto'])->get();
@@ -28,7 +28,6 @@ class DetalleCompraController extends Controller
 
         $detalle = DetalleCompra::create($validated);
 
-        // Registrar entrada en inventario
         Inventario::create([
             'producto_id' => $detalle->producto_id,
             'tipo_movimiento' => 'entrada',
@@ -37,7 +36,6 @@ class DetalleCompraController extends Controller
             'observacion' => 'Compra registrada',
         ]);
 
-        // Actualizar stock del producto
         $producto = Producto::find($detalle->producto_id);
         if ($producto) {
             $producto->stock += $detalle->cantidad;

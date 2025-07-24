@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Venta;
 use App\Models\Cliente;
+use App\Models\Producto;
 
 class VentaController extends Controller
 {
-    //Lista de ventas
+    //Lista
     public function index(Request $request)
     {
         $query = \App\Models\Venta::with('cliente');
@@ -21,14 +22,13 @@ class VentaController extends Controller
         return view('ventas.index', compact('ventas'));
     }
 
-    //Mostrar formulario de creación
     public function create()
     {
         $clientes = Cliente::all();
-        return view('ventas.create', compact('clientes'));
+        $productos = Producto::all();
+        return view('ventas.create', compact('clientes', 'productos'));
     }
 
-    //Validaciones
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -40,14 +40,12 @@ class VentaController extends Controller
         return redirect()->route('ventas.index')->with('success', 'Venta creada correctamente.');
     }
 
-    //Muestra una venta en específico
     public function show(string $id)
     {
         $venta = Venta::with('cliente')->findOrFail($id);
         return view('ventas.show', compact('venta'));
     }
 
-    //Edición
     public function edit(string $id)
     {
         $venta = Venta::findOrFail($id);

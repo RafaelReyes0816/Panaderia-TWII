@@ -25,7 +25,6 @@
                     <th>Cliente</th>
                     <th>Fecha</th>
                     <th>Total</th>
-                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,18 +34,10 @@
                         <td>{{ $venta->cliente->nombre ?? '' }}</td>
                         <td>{{ $venta->fecha }}</td>
                         <td>{{ $venta->total }}</td>
-                        <td>
-                            <a href="{{ route('ventas.edit', $venta->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                            <form action="{{ route('ventas.destroy', $venta->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                            </form>
-                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center">No hay ventas registradas.</td>
+                        <td colspan="4" class="text-center">No hay ventas registradas.</td>
                     </tr>
                 @endforelse
             </tbody>

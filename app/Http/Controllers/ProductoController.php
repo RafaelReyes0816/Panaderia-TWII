@@ -9,7 +9,7 @@ use App\Models\Inventario;
 class ProductoController extends Controller
 {
 
-    //Lista de productos
+    //Lista
     public function index(Request $request)
     {
         $query = \App\Models\Producto::query();
@@ -20,13 +20,12 @@ class ProductoController extends Controller
         return view('productos.index', compact('productos'));
     }
 
-    //Muestra elformulario
     public function create()
     {
         return view('productos.create');
     }
 
-    //Validaciones
+    
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -46,7 +45,6 @@ class ProductoController extends Controller
 
         $producto = Producto::create($validated);
 
-        // Registrar entrada en inventario si el stock inicial es mayor a 0
         if ($producto->stock > 0) {
             Inventario::create([
                 'producto_id' => $producto->id,
@@ -60,14 +58,12 @@ class ProductoController extends Controller
         return redirect()->route('productos.index')->with('success', 'Producto creado correctamente.');
     }
 
-    //Muestra un producto en específico
     public function show(string $id)
     {
         $producto = Producto::findOrFail($id);
         return view('productos.show', compact('producto'));
     }
 
-    //Edición
     public function edit(string $id)
     {
         $producto = Producto::findOrFail($id);

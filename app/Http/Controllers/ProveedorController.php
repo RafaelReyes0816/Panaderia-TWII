@@ -7,7 +7,7 @@ use App\Models\Proveedor;
 
 class ProveedorController extends Controller
 {
-    //Lista de proveedores
+    //Lista
     public function index(Request $request)
     {
         $query = \App\Models\Proveedor::query();
@@ -36,21 +36,18 @@ class ProveedorController extends Controller
         return redirect()->route('proveedores.index')->with('success', 'Proveedor creado correctamente.');
     }
 
-    //Muestra a un proveedor en específico
     public function show(string $id)
     {
         $proveedor = Proveedor::findOrFail($id);
         return view('proveedores.show', compact('proveedor'));
     }
 
-    //Edición
     public function edit(string $id)
     {
         $proveedor = Proveedor::findOrFail($id);
         return view('proveedores.edit', compact('proveedor'));
     }
 
-    //Actualización
     public function update(Request $request, string $id)
     {
         $proveedor = Proveedor::findOrFail($id);

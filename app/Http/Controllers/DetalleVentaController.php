@@ -9,7 +9,6 @@ use App\Models\Producto;
 
 class DetalleVentaController extends Controller
 {
-    //Detalles de venta
     public function index()
     {
         $detalles = DetalleVenta::with(['venta', 'producto'])->get();
@@ -27,7 +26,6 @@ class DetalleVentaController extends Controller
 
         $detalle = DetalleVenta::create($validated);
 
-        // Registrar salida en inventario
         Inventario::create([
             'producto_id' => $detalle->producto_id,
             'tipo_movimiento' => 'salida',
@@ -36,7 +34,6 @@ class DetalleVentaController extends Controller
             'observacion' => 'Venta realizada',
         ]);
 
-        // Actualizar stock del producto
         $producto = Producto::find($detalle->producto_id);
         if ($producto) {
             $producto->stock = max(0, $producto->stock - $detalle->cantidad);

@@ -8,7 +8,7 @@ use App\Models\Proveedor;
 
 class CompraController extends Controller
 {
-    //tabla de compras
+    //tabla
     public function index(Request $request)
     {
         $query = \App\Models\Compra::with('proveedor');
@@ -27,7 +27,7 @@ class CompraController extends Controller
         return view('compras.create', compact('proveedores'));
     }
 
-    //Validaciones
+    //Validación
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -39,22 +39,19 @@ class CompraController extends Controller
         return redirect()->route('compras.index')->with('success', 'Compra creada correctamente.');
     }
 
-    //Muestra una compra en específico
     public function show(string $id)
     {
         $compra = Compra::with('proveedor')->findOrFail($id);
         return view('compras.show', compact('compra'));
     }
 
-    //Edición
     public function edit(string $id)
     {
         $compra = Compra::findOrFail($id);
         $proveedores = Proveedor::all();
         return view('compras.edit', compact('compra', 'proveedores'));
     }
-
-    //Actualización
+    
     public function update(Request $request, string $id)
     {
         $compra = Compra::findOrFail($id);

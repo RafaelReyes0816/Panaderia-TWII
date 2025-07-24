@@ -19,7 +19,6 @@
                     <th>Proveedor</th>
                     <th>Fecha</th>
                     <th>Total</th>
-                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,18 +28,10 @@
                         <td>{{ $compra->proveedor->nombre ?? '' }}</td>
                         <td>{{ $compra->fecha }}</td>
                         <td>{{ $compra->total }}</td>
-                        <td>
-                            <a href="{{ route('compras.edit', $compra->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                            <form action="{{ route('compras.destroy', $compra->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                            </form>
-                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center">No hay compras registradas.</td>
+                        <td colspan="4" class="text-center">No hay compras registradas.</td>
                     </tr>
                 @endforelse
             </tbody>

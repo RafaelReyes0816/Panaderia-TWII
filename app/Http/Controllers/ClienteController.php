@@ -18,13 +18,11 @@ class ClienteController extends Controller
         return view('clientes.index', compact('clientes'));
     }
 
-    //Muestra el formulario
     public function create()
     {
         return view('clientes.create');
     }
 
-    //Validaciones
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -37,21 +35,18 @@ class ClienteController extends Controller
         return redirect()->route('clientes.index')->with('success', 'Cliente creado correctamente.');
     }
 
-    //Muestra un cliente en específico
     public function show(string $id)
     {
         $cliente = Cliente::findOrFail($id);
         return view('clientes.show', compact('cliente'));
     }
 
-    //Edición
     public function edit(string $id)
     {
         $cliente = Cliente::findOrFail($id);
         return view('clientes.edit', compact('cliente'));
     }
 
-    //Actualización
     public function update(Request $request, string $id)
     {
         $cliente = Cliente::findOrFail($id);
