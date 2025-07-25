@@ -16,7 +16,7 @@ class InventarioController extends Controller
                 $q->where('nombre', 'like', '%' . $request->buscar . '%');
             });
         }
-        $inventario = $query->orderBy('producto_id')->paginate(7)->withQueryString();
+        $inventario = $query->orderBy('producto_id')->paginate(5)->withQueryString();
         return view('inventario.index', compact('inventario'));
     }
 }
