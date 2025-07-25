@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Panadería</title>
+    <title>Pan y Punto</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     @stack('styles')
@@ -76,7 +76,7 @@
 <body>
     <header class="p-3 mb-4">
         <div class="container">
-            <h1>Panadería</h1>
+            <h1>Pan y Punto</h1>
             <nav>
                 <a class="btn btn-light me-2" href="{{ url('/') }}">Inicio</a>
                 <a class="btn btn-light me-2" href="{{ route('productos.index') }}">Productos</a>
@@ -95,7 +95,7 @@
     </main>
 
     <footer class="text-center py-3">
-        <p>&copy; {{ date('Y') }} Panadería. Todos los derechos reservados.</p>
+        <p>&copy; {{ date('Y') }} Pan y Punto. Todos los derechos reservados.</p>
     </footer>
     @yield('scripts')
     @stack('scripts')
