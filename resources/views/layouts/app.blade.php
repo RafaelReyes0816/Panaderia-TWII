@@ -76,7 +76,6 @@
 <body>
     <header class="p-3 mb-4">
         <div class="container">
-            <h1>PAN Y PUNTO</h1>
             <nav>
                 <a class="btn btn-light me-2" href="{{ url('/') }}">Inicio</a>
                 <a class="btn btn-light me-2" href="{{ route('productos.index') }}">Productos</a>
