@@ -6,6 +6,18 @@ Este proyecto es un sistema de gestión para una panadería, desarrollado en Lar
 
 ---
 
+## Funcionalidades principales
+
+- Gestión de **Clientes**: Alta, edición, listado y eliminación de clientes.
+- Gestión de **Proveedores**: Alta, edición, listado y eliminación de proveedores.
+- Gestión de **Productos**: CRUD de productos, incluyendo imagen, stock y descripción.
+- Gestión de **Ventas**: Registro de ventas, selección de cliente y productos, historial de ventas.
+- Gestión de **Compras**: Registro de compras a proveedores, historial de compras.
+- Gestión de **Inventario**: Control de entradas y salidas de productos, historial de movimientos.
+- Vistas web para cada módulo, con formularios y listados paginados.
+
+---
+
 ## ¿Cómo ejecutar el proyecto?
 
 1. **Clona el repositorio**
@@ -52,8 +64,6 @@ Este proyecto es un sistema de gestión para una panadería, desarrollado en Lar
 
 ---
 
-```markdown
 > **Nota:**  
-> Este proyecto solo incluye la estructura de base de datos (migraciones), modelos Eloquent, factories y seeders.  
-> No cuenta con vistas, controladores ni rutas web, por lo que al levantar el servidor (`php artisan serve`) no se mostrará ninguna interfaz en el navegador.
-```
+> Este proyecto incluye la estructura de base de datos (migraciones), modelos Eloquent, factories, seeders, controladores y vistas web para los módulos principales.  
+> Al levantar el servidor (`php artisan serve`) podrás acceder a la interfaz web para gestionar la panadería desde el navegador.
