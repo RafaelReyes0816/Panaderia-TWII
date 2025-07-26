@@ -5,6 +5,7 @@
     <title>PAN Y PUNTO</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     @stack('styles')
     <style>
         body {
@@ -76,15 +77,25 @@
 <body>
     <header class="p-3 mb-4">
         <div class="container">
-            <nav>
-                <a class="btn btn-light me-2" href="{{ url('/') }}">Inicio</a>
-                <a class="btn btn-light me-2" href="{{ route('productos.index') }}">Productos</a>
-                <a class="btn btn-light me-2" href="{{ route('proveedores.index') }}">Proveedores</a>
-                <a class="btn btn-light me-2" href="{{ route('compras.index') }}">Compras</a>
-                <a class="btn btn-light" href="{{ route('ventas.index') }}">Ventas</a>
-                <a class="btn btn-light" href="{{ route('clientes.index') }}">Clientes</a>
-                <a class="btn btn-light" href="{{ route('inventario.index') }}">Inventario</a>
-                <a class="btn btn-light" href="{{ route('detalles.index') }}">Reportes</a>
+            <nav class="d-flex justify-content-between align-items-center">
+                <div>
+                    <a class="btn btn-light me-2" href="{{ route('productos.index') }}">Productos</a>
+                    <a class="btn btn-light me-2" href="{{ route('proveedores.index') }}">Proveedores</a>
+                    <a class="btn btn-light me-2" href="{{ route('compras.index') }}">Compras</a>
+                    <a class="btn btn-light me-2" href="{{ route('ventas.index') }}">Ventas</a>
+                    <a class="btn btn-light me-2" href="{{ route('clientes.index') }}">Clientes</a>
+                    <a class="btn btn-light me-2" href="{{ route('inventario.index') }}">Inventario</a>
+                    <a class="btn btn-light me-2" href="{{ route('detalles.index') }}">Reportes</a>
+                </div>
+                <div>
+                    <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-light">
+                            <i class="fas fa-sign-out-alt me-1"></i>
+                            Cerrar Sesión
+                        </button>
+                    </form>
+                </div>
             </nav>
         </div>
     </header>

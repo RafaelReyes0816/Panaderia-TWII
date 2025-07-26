@@ -9,17 +9,19 @@ use App\Http\Controllers\VentaController;
 use App\Http\Controllers\DetalleVentaController;
 use App\Http\Controllers\DetalleCompraController;
 use App\Http\Controllers\InventarioController;
+use App\Http\Controllers\VisitanteController;
+use App\Http\Controllers\Auth\AuthController;
 
 use App\Models\DetalleVenta;
 use App\Models\DetalleCompra;
 
 
-Route::get('/', function () {
-    return view('inicio.index');
-})->name('inicio');
 
-//Ruta de productos
-Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
+
+//Rutas protegidas para empleados
+Route::middleware('auth')->group(function () {
+    //Ruta productos (empleados)
+    Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
 Route::get('/productos/crear', [ProductoController::class, 'create'])->name('productos.create');
 Route::post('/productos', [ProductoController::class, 'store'])->name('productos.store');
 Route::get('/productos/{id}/editar', [ProductoController::class, 'edit'])->name('productos.edit');
@@ -82,3 +84,14 @@ Route::get('/detalles', function (\Illuminate\Http\Request $request) {
     }
     return view('detalles', compact('detallesVenta', 'detallesCompra'));
 })->name('detalles.index');
+});
+
+//Ruta de visitantes
+Route::get('/', [VisitanteController::class, 'index'])->name('inicio');
+Route::get('/menu', [VisitanteController::class, 'productos'])->name('visitantes.menu');
+Route::get('/contacto', [VisitanteController::class, 'contacto'])->name('visitantes.contacto');
+
+//Rutas de autenticación
+Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
