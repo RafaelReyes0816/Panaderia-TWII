@@ -11,12 +11,49 @@
 
     <div class="col-12 mb-4">
         <div class="card p-3">
-            <div class="row">
-                <div class="col-md-6 mx-auto">
-                    <label for="buscar" class="form-label">Buscar producto:</label>
-                    <input type="text" class="form-control" id="buscar" placeholder="Escribe el nombre del producto...">
+            <form method="GET" action="{{ route('visitantes.menu') }}" id="form-busqueda">
+                <div class="row">
+                    <div class="col-md-8 mx-auto">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <label for="buscar" class="form-label">Buscar producto:</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="buscar" name="buscar" 
+                                           placeholder="Escribe el nombre del producto..." 
+                                           value="{{ request('buscar') }}">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="limpiarBusqueda()">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                @if(request('buscar') || request('filtro_stock'))
+                                    <div class="mt-2 text-success small">
+                                        <i class="fas fa-check"></i> 
+                                        Se encontraron {{ $productos->total() }} producto(s)
+                                        @if(request('buscar'))
+                                            para "{{ request('buscar') }}"
+                                        @endif
+                                        @if(request('filtro_stock'))
+                                            (filtro: {{ request('filtro_stock') }})
+                                        @endif
+                                    </div>
+                                @endif
+                                <div id="buscando" class="mt-2 text-info small" style="display: none;">
+                                    <i class="fas fa-spinner fa-spin"></i> Buscando...
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="filtro_stock" class="form-label">Filtrar por disponibilidad:</label>
+                                <select class="form-select" id="filtro_stock" name="filtro_stock" onchange="this.form.submit()">
+                                    <option value="">Todos los productos</option>
+                                    <option value="disponible" {{ request('filtro_stock') == 'disponible' ? 'selected' : '' }}>Disponible</option>
+                                    <option value="pocas" {{ request('filtro_stock') == 'pocas' ? 'selected' : '' }}>Pocas unidades</option>
+                                    <option value="agotado" {{ request('filtro_stock') == 'agotado' ? 'selected' : '' }}>Agotándose</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -60,8 +97,24 @@
             <div class="col-12 text-center">
                 <div class="alert alert-info p-3">
                     <i class="fas fa-info-circle fa-2x mb-3"></i>
-                    <h4>No hay productos disponibles en este momento</h4>
-                    <p>Próximamente tendremos más productos frescos para ti.</p>
+                    @if(request('buscar') || request('filtro_stock'))
+                        <h4>No se encontraron productos</h4>
+                        <p>
+                            No hay productos que coincidan con los criterios de búsqueda.
+                            @if(request('buscar'))
+                                <br><strong>Búsqueda:</strong> "{{ request('buscar') }}"
+                            @endif
+                            @if(request('filtro_stock'))
+                                <br><strong>Filtro:</strong> {{ request('filtro_stock') }}
+                            @endif
+                        </p>
+                        <a href="{{ route('visitantes.menu') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-times"></i> Limpiar búsqueda
+                        </a>
+                    @else
+                        <h4>No hay productos disponibles en este momento</h4>
+                        <p>Próximamente tendremos más productos frescos para ti.</p>
+                    @endif
                 </div>
             </div>
             @endforelse
@@ -128,25 +181,28 @@ function contactarProducto(nombre) {
     window.open(whatsapp, '_blank');
 }
 
-//búsqueda
+// Búsqueda con delay para evitar demasiadas peticiones
 document.addEventListener('DOMContentLoaded', function() {
     const buscarInput = document.getElementById('buscar');
-    const productos = document.querySelectorAll('.col-lg-4.col-md-6');
+    let timeoutId;
     
     buscarInput.addEventListener('input', function() {
-        const busqueda = this.value.toLowerCase().trim();
+        clearTimeout(timeoutId);
         
-        productos.forEach(producto => {
-            const nombre = producto.querySelector('.card-title').textContent.toLowerCase();
-            const descripcion = producto.querySelector('.card-text').textContent.toLowerCase();
-            
-            if (nombre.includes(busqueda) || descripcion.includes(busqueda)) {
-                producto.style.display = 'block';
-            } else {
-                producto.style.display = 'none';
-            }
-        });
+        // Mostrar indicador de búsqueda
+        document.getElementById('buscando').style.display = 'block';
+        
+        timeoutId = setTimeout(function() {
+            document.getElementById('form-busqueda').submit();
+        }, 500); // Espera 500ms después de que el usuario deje de escribir
     });
+    
+    // Función para limpiar búsqueda
+    window.limpiarBusqueda = function() {
+        buscarInput.value = '';
+        document.getElementById('filtro_stock').value = '';
+                 window.location.href = '{{ route("visitantes.menu") }}';
+    };
 });
 </script>
 @endpush
