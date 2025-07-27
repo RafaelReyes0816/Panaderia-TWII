@@ -20,6 +20,17 @@
             @forelse($productosDestacados as $producto)
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
+                    @if($producto->imagen)
+                        <img src="{{ asset('storage/' . $producto->imagen) }}" 
+                             alt="{{ $producto->nombre }}" 
+                             class="card-img-top" 
+                             style="height: 200px; object-fit: cover;">
+                    @else
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                             style="height: 200px;">
+                            <i class="fas fa-bread-slice fa-3x text-muted"></i>
+                        </div>
+                    @endif
                     <div class="card-body p-4">
                         <h5 class="card-title mb-3">{{ $producto->nombre }}</h5>
                         <p class="card-text mb-3">{{ $producto->descripcion }}</p>

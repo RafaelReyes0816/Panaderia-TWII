@@ -19,6 +19,7 @@
                     <th>Proveedor</th>
                     <th>Fecha</th>
                     <th>Total</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,11 +28,20 @@
                         <td>{{ $compra->id }}</td>
                         <td>{{ $compra->proveedor->nombre ?? '' }}</td>
                         <td>{{ $compra->fecha }}</td>
-                        <td>{{ $compra->total }}</td>
+                        <td>Bs {{ number_format($compra->total, 2) }}</td>
+                        <td>
+                            <a href="{{ route('compras.show', $compra->id) }}" class="btn btn-info btn-sm">Ver</a>
+                            <a href="{{ route('compras.edit', $compra->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                            <form action="{{ route('compras.destroy', $compra->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta compra?')">Eliminar</button>
+                            </form>
+                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center">No hay compras registradas.</td>
+                        <td colspan="5" class="text-center">No hay compras registradas.</td>
                     </tr>
                 @endforelse
             </tbody>

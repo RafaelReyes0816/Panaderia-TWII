@@ -13,6 +13,12 @@
         </div>
     @endif
     
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+    
     <form action="{{ route('ventas.store') }}" method="POST" class="card p-4">
         @csrf
         <div class="mb-3">
@@ -99,8 +105,8 @@ function renderResumen() {
         row.innerHTML = `
             <td>${item.nombre}<input type="hidden" name="productos[]" value="${item.id}"></td>
             <td>${item.cantidad}<input type="hidden" name="cantidades[]" value="${item.cantidad}"></td>
-            <td>${item.precio.toFixed(2)}</td>
-            <td>${subtotal.toFixed(2)}</td>
+            <td>Bs ${item.precio.toFixed(2)}</td>
+            <td>Bs ${subtotal.toFixed(2)}</td>
             <td><button type="button" class="btn btn-danger btn-sm remove-row" data-idx="${idx}">Eliminar</button></td>
         `;
         tbody.appendChild(row);

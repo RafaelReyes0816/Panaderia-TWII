@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use App\Models\Venta;
 use App\Models\Cliente;
 use App\Models\Producto;
@@ -57,7 +58,7 @@ class VentaController extends Controller
         if (!empty($productosSinStock)) {
             return redirect()->back()
                 ->withInput()
-                ->withErrors(['stock' => 'Stock insuficiente para: ' . implode(', ', $productosSinStock)]);
+                ->with('error', 'Stock insuficiente para: ' . implode(', ', $productosSinStock));
         }
 
         // Crear la venta
@@ -101,7 +102,7 @@ class VentaController extends Controller
 
     public function show(string $id)
     {
-        $venta = Venta::with('cliente')->findOrFail($id);
+        $venta = Venta::with(['cliente', 'detalles.producto'])->findOrFail($id);
         return view('ventas.show', compact('venta'));
     }
 

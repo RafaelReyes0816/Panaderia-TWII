@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
 Route::get('/productos/crear', [ProductoController::class, 'create'])->name('productos.create');
 Route::post('/productos', [ProductoController::class, 'store'])->name('productos.store');
+Route::get('/productos/{id}', [ProductoController::class, 'show'])->name('productos.show');
 Route::get('/productos/{id}/editar', [ProductoController::class, 'edit'])->name('productos.edit');
 Route::put('/productos/{id}', [ProductoController::class, 'update'])->name('productos.update');
 Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])->name('productos.destroy');
@@ -33,6 +34,7 @@ Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])->name('
 Route::get('/proveedores', [ProveedorController::class, 'index'])->name('proveedores.index');
 Route::get('/proveedores/crear', [ProveedorController::class, 'create'])->name('proveedores.create');
 Route::post('/proveedores', [ProveedorController::class, 'store'])->name('proveedores.store');
+Route::get('/proveedores/{id}', [ProveedorController::class, 'show'])->name('proveedores.show');
 Route::get('/proveedores/{id}/editar', [ProveedorController::class, 'edit'])->name('proveedores.edit');
 Route::put('/proveedores/{id}', [ProveedorController::class, 'update'])->name('proveedores.update');
 Route::delete('/proveedores/{id}', [ProveedorController::class, 'destroy'])->name('proveedores.destroy');
@@ -42,6 +44,7 @@ Route::delete('/proveedores/{id}', [ProveedorController::class, 'destroy'])->nam
 Route::get('/compras', [CompraController::class, 'index'])->name('compras.index');
 Route::get('/compras/crear', [CompraController::class, 'create'])->name('compras.create');
 Route::post('/compras', [CompraController::class, 'store'])->name('compras.store');
+Route::get('/compras/{id}', [CompraController::class, 'show'])->name('compras.show');
 Route::get('/compras/{id}/editar', [CompraController::class, 'edit'])->name('compras.edit');
 Route::put('/compras/{id}', [CompraController::class, 'update'])->name('compras.update');
 Route::delete('/compras/{id}', [CompraController::class, 'destroy'])->name('compras.destroy');
@@ -51,6 +54,7 @@ Route::delete('/compras/{id}', [CompraController::class, 'destroy'])->name('comp
 Route::get('/ventas', [VentaController::class, 'index'])->name('ventas.index');
 Route::get('/ventas/crear', [VentaController::class, 'create'])->name('ventas.create');
 Route::post('/ventas', [VentaController::class, 'store'])->name('ventas.store');
+Route::get('/ventas/{id}', [VentaController::class, 'show'])->name('ventas.show');
 Route::get('/ventas/{id}/editar', [VentaController::class, 'edit'])->name('ventas.edit');
 Route::put('/ventas/{id}', [VentaController::class, 'update'])->name('ventas.update');
 Route::delete('/ventas/{id}', [VentaController::class, 'destroy'])->name('ventas.destroy');
@@ -78,9 +82,9 @@ Route::get('/detalles', function (\Illuminate\Http\Request $request) {
     $detallesVenta = collect();
     $detallesCompra = collect();
     if ($tipo === 'venta') {
-        $detallesVenta = \App\Models\DetalleVenta::paginate(5);
+        $detallesVenta = \App\Models\DetalleVenta::with(['venta', 'producto'])->paginate(5);
     } elseif ($tipo === 'compra') {
-        $detallesCompra = \App\Models\DetalleCompra::paginate(5);
+        $detallesCompra = \App\Models\DetalleCompra::with(['compra', 'producto'])->paginate(5);
     }
     return view('detalles', compact('detallesVenta', 'detallesCompra'));
 })->name('detalles.index');

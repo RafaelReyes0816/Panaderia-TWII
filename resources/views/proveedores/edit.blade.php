@@ -17,7 +17,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Dirección:</label>
-            <input type="text" name="direccion" value="{{ old('direccion', $proveedor->direccion) }}" class="form-control">
+            <textarea name="direccion" class="form-control" rows="3" placeholder="Ingrese la dirección completa del proveedor">{{ old('direccion', $proveedor->direccion) }}</textarea>
             @error('direccion') <div class="text-danger">{{ $message }}</div> @enderror
         </div>
         <div class="mb-3">

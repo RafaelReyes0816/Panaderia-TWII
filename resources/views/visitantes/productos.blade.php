@@ -62,10 +62,18 @@
             @forelse($productos as $producto)
             <div class="col-lg-4 col-md-6 mb-3">
                 <div class="card h-100 shadow-sm border-0">
-                    <div class="card-body p-2">
-                        <div class="text-center mb-2">
-                            <i class="fas fa-bread-slice fa-2x text-warning"></i>
+                    @if($producto->imagen)
+                        <img src="{{ asset('storage/' . $producto->imagen) }}" 
+                             alt="{{ $producto->nombre }}" 
+                             class="card-img-top" 
+                             style="height: 180px; object-fit: cover;">
+                    @else
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                             style="height: 180px;">
+                            <i class="fas fa-bread-slice fa-2x text-muted"></i>
                         </div>
+                    @endif
+                    <div class="card-body p-2">
                         <h5 class="card-title text-center mb-2">{{ $producto->nombre }}</h5>
                         <p class="card-text text-muted text-center mb-2">{{ $producto->descripcion }}</p>
                         

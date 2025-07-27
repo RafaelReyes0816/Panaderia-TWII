@@ -84,7 +84,7 @@ class CompraController extends Controller
 
     public function show(string $id)
     {
-        $compra = Compra::with('proveedor')->findOrFail($id);
+        $compra = Compra::with(['proveedor', 'detalles.producto'])->findOrFail($id);
         return view('compras.show', compact('compra'));
     }
 

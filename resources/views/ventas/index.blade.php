@@ -25,6 +25,7 @@
                     <th>Cliente</th>
                     <th>Fecha</th>
                     <th>Total</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,11 +34,20 @@
                         <td>{{ ($ventas->currentPage() - 1) * $ventas->perPage() + $loop->iteration }}</td>
                         <td>{{ $venta->cliente->nombre ?? '' }}</td>
                         <td>{{ $venta->fecha }}</td>
-                        <td>{{ $venta->total }}</td>
+                        <td>Bs {{ number_format($venta->total, 2) }}</td>
+                        <td>
+                            <a href="{{ route('ventas.show', $venta->id) }}" class="btn btn-info btn-sm">Ver</a>
+                            <a href="{{ route('ventas.edit', $venta->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                            <form action="{{ route('ventas.destroy', $venta->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta venta?')">Eliminar</button>
+                            </form>
+                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center">No hay ventas registradas.</td>
+                        <td colspan="5" class="text-center">No hay ventas registradas.</td>
                     </tr>
                 @endforelse
             </tbody>

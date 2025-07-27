@@ -27,10 +27,19 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Imagen:</label>
+            @if($producto->imagen)
+                <div class="mb-2">
+                    <p class="text-muted">Imagen actual:</p>
+                    <img src="{{ asset('storage/' . $producto->imagen) }}" 
+                         alt="{{ $producto->nombre }}" 
+                         class="img-thumbnail" 
+                         style="width: 150px; height: 150px; object-fit: cover;">
+                </div>
+            @endif
             <div class="custom-file">
                 <input type="file" name="imagen" class="custom-file-input" id="imagenInput" accept="image/*" style="display:none;" onchange="document.getElementById('imagenLabel').innerText = this.files[0]?.name || 'Ningún archivo seleccionado';">
                 <button type="button" class="btn btn-primary" style="background-color: #6B3F1D; color: #FFD700; border: none;" onclick="document.getElementById('imagenInput').click();">
-                    Seleccionar imagen
+                    {{ $producto->imagen ? 'Cambiar imagen' : 'Seleccionar imagen' }}
                 </button>
                 <span id="imagenLabel" class="ms-2 text-muted">Ningún archivo seleccionado</span>
             </div>

@@ -22,6 +22,7 @@
             <thead>
                 <tr>
                     <th>#</th>
+                    <th>Imagen</th>
                     <th>Nombre</th>
                     <th>Precio</th>
                     <th>Descripción</th>
@@ -33,11 +34,29 @@
                 @forelse($productos as $producto)
                     <tr>
                         <td>{{ ($productos->currentPage() - 1) * $productos->perPage() + $loop->iteration }}</td>
-                        <td>{{ $producto->nombre }}</td>
-                        <td>{{ $producto->precio }}</td>
-                        <td>{{ $producto->descripcion }}</td>
-                        <td>{{ $producto->stock }}</td>
                         <td>
+                            @if($producto->imagen)
+                                <img src="{{ asset('storage/' . $producto->imagen) }}" 
+                                     alt="{{ $producto->nombre }}" 
+                                     class="img-thumbnail" 
+                                     style="width: 80px; height: 80px; object-fit: cover;">
+                            @else
+                                <div class="bg-light d-flex align-items-center justify-content-center" 
+                                     style="width: 80px; height: 80px; border: 1px solid #dee2e6;">
+                                    <i class="fas fa-image text-muted" style="font-size: 2rem;"></i>
+                                </div>
+                            @endif
+                        </td>
+                        <td>{{ $producto->nombre }}</td>
+                        <td>Bs {{ number_format($producto->precio, 2) }}</td>
+                        <td>{{ $producto->descripcion }}</td>
+                        <td>
+                            <span class="badge {{ $producto->stock > 0 ? 'bg-success' : 'bg-danger' }}">
+                                {{ $producto->stock }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{{ route('productos.show', $producto->id) }}" class="btn btn-info btn-sm">Ver</a>
                             <a href="{{ route('productos.edit', $producto->id) }}" class="btn btn-primary btn-sm">Editar</a>
                             <form action="{{ route('productos.destroy', $producto->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
@@ -48,7 +67,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center">No hay productos registrados.</td>
+                        <td colspan="7" class="text-center">No hay productos registrados.</td>
                     </tr>
                 @endforelse
             </tbody>

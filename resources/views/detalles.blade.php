@@ -16,7 +16,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Venta ID</th>
-                        <th>Producto ID</th>
+                        <th>Producto</th>
                         <th>Cantidad</th>
                         <th>Subtotal</th>
                         <th>Creado</th>
@@ -28,11 +28,19 @@
                     <tr>
                         <td>{{ $detalle->id }}</td>
                         <td>{{ $detalle->venta_id }}</td>
-                        <td>{{ $detalle->producto_id }}</td>
+                        <td>
+                            @if($detalle->producto)
+                                <strong>{{ $detalle->producto->nombre }}</strong>
+                                <br>
+                                <small class="text-muted">ID: {{ $detalle->producto_id }}</small>
+                            @else
+                                <span class="text-danger">Producto no encontrado (ID: {{ $detalle->producto_id }})</span>
+                            @endif
+                        </td>
                         <td>{{ $detalle->cantidad }}</td>
-                        <td>{{ $detalle->subtotal }}</td>
-                        <td>{{ $detalle->created_at }}</td>
-                        <td>{{ $detalle->updated_at }}</td>
+                        <td>Bs {{ number_format($detalle->subtotal, 2) }}</td>
+                        <td>{{ $detalle->created_at->format('d/m/Y H:i') }}</td>
+                        <td>{{ $detalle->updated_at->format('d/m/Y H:i') }}</td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -82,7 +90,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Compra ID</th>
-                        <th>Producto ID</th>
+                        <th>Producto</th>
                         <th>Cantidad</th>
                         <th>Precio Unitario</th>
                         <th>Subtotal</th>
@@ -95,12 +103,20 @@
                     <tr>
                         <td>{{ $detalle->id }}</td>
                         <td>{{ $detalle->compra_id }}</td>
-                        <td>{{ $detalle->producto_id }}</td>
+                        <td>
+                            @if($detalle->producto)
+                                <strong>{{ $detalle->producto->nombre }}</strong>
+                                <br>
+                                <small class="text-muted">ID: {{ $detalle->producto_id }}</small>
+                            @else
+                                <span class="text-danger">Producto no encontrado (ID: {{ $detalle->producto_id }})</span>
+                            @endif
+                        </td>
                         <td>{{ $detalle->cantidad }}</td>
-                        <td>{{ $detalle->precio_unitario }}</td>
-                        <td>{{ $detalle->subtotal }}</td>
-                        <td>{{ $detalle->created_at }}</td>
-                        <td>{{ $detalle->updated_at }}</td>
+                        <td>Bs {{ number_format($detalle->precio_unitario, 2) }}</td>
+                        <td>Bs {{ number_format($detalle->subtotal, 2) }}</td>
+                        <td>{{ $detalle->created_at->format('d/m/Y H:i') }}</td>
+                        <td>{{ $detalle->updated_at->format('d/m/Y H:i') }}</td>
                     </tr>
                 @endforeach
                 </tbody>

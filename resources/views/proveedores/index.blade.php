@@ -38,6 +38,7 @@
                         <td>{{ $proveedor->direccion }}</td>
                         <td>{{ $proveedor->contacto }}</td>
                         <td>
+                            <a href="{{ route('proveedores.show', $proveedor->id) }}" class="btn btn-info btn-sm">Ver</a>
                             <a href="{{ route('proveedores.edit', $proveedor->id) }}" class="btn btn-warning btn-sm">Editar</a>
                             <form action="{{ route('proveedores.destroy', $proveedor->id) }}" method="POST" style="display:inline;">
                                 @csrf
