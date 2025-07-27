@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Venta;
 use App\Models\Cliente;
 use App\Models\Producto;
+use App\Models\DetalleVenta;
+use App\Models\Inventario;
 
 class VentaController extends Controller
 {
@@ -35,8 +37,65 @@ class VentaController extends Controller
             'cliente_id' => 'nullable|exists:clientes,id',
             'fecha' => 'required|date',
             'total' => 'required|numeric|min:0',
+            'productos' => 'required|array|min:1',
+            'productos.*' => 'exists:productos,id',
+            'cantidades' => 'required|array|min:1',
+            'cantidades.*' => 'integer|min:1',
         ]);
-        Venta::create($validated);
+
+        // Verificar stock disponible antes de procesar
+        $productosSinStock = [];
+        foreach ($validated['productos'] as $index => $productoId) {
+            $cantidad = $validated['cantidades'][$index];
+            $producto = Producto::find($productoId);
+            
+            if ($producto && $producto->stock < $cantidad) {
+                $productosSinStock[] = $producto->nombre . ' (Stock: ' . $producto->stock . ', Solicitado: ' . $cantidad . ')';
+            }
+        }
+
+        if (!empty($productosSinStock)) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['stock' => 'Stock insuficiente para: ' . implode(', ', $productosSinStock)]);
+        }
+
+        // Crear la venta
+        $venta = Venta::create([
+            'cliente_id' => $validated['cliente_id'],
+            'fecha' => $validated['fecha'],
+            'total' => $validated['total'],
+        ]);
+
+        // Procesar cada producto de la venta
+        foreach ($validated['productos'] as $index => $productoId) {
+            $cantidad = $validated['cantidades'][$index];
+            $producto = Producto::find($productoId);
+            
+            if ($producto) {
+                // Crear detalle de venta
+                $detalle = DetalleVenta::create([
+                    'venta_id' => $venta->id,
+                    'producto_id' => $productoId,
+                    'cantidad' => $cantidad,
+                    'subtotal' => $producto->precio * $cantidad,
+                ]);
+
+                // Registrar movimiento de inventario (salida)
+                Inventario::create([
+                    'producto_id' => $productoId,
+                    'tipo_movimiento' => 'salida',
+                    'cantidad' => $cantidad,
+                    'fecha' => now(),
+                    'observacion' => 'Venta #' . $venta->id,
+                ]);
+
+                // Actualizar stock del producto
+                $producto->stock = max(0, $producto->stock - $cantidad);
+                $producto->save();
+            }
+        }
+
         return redirect()->route('ventas.index')->with('success', 'Venta creada correctamente.');
     }
 

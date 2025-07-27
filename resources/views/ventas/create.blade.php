@@ -2,6 +2,17 @@
 
 @section('content')
     <h1 class="mb-4">Registrar Venta</h1>
+    
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    
     <form action="{{ route('ventas.store') }}" method="POST" class="card p-4">
         @csrf
         <div class="mb-3">
@@ -24,7 +35,9 @@
             <select id="producto-select" class="form-control">
                 <option value="">Seleccione un producto</option>
                 @foreach($productos as $producto)
-                    <option value="{{ $producto->id }}" data-precio="{{ $producto->precio }}">{{ $producto->nombre }}</option>
+                    <option value="{{ $producto->id }}" data-precio="{{ $producto->precio }}" data-stock="{{ $producto->stock }}">
+                        {{ $producto->nombre }} (Stock: {{ $producto->stock }})
+                    </option>
                 @endforeach
             </select>
         </div>
@@ -67,7 +80,8 @@ const productosData = {
     @foreach($productos as $producto)
         {{ $producto->id }}: {
             nombre: "{{ $producto->nombre }}",
-            precio: {{ $producto->precio }}
+            precio: {{ $producto->precio }},
+            stock: {{ $producto->stock }}
         },
     @endforeach
 };
@@ -99,6 +113,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const productoId = document.getElementById('producto-select').value;
         const cantidad = parseInt(document.getElementById('cantidad-input').value) || 1;
         if (!productoId || !productosData[productoId]) return;
+        
+        // Verificar stock disponible
+        if (cantidad > productosData[productoId].stock) {
+            let alerta = document.getElementById('alerta-producto');
+            alerta.textContent = 'Stock insuficiente. Disponible: ' + productosData[productoId].stock;
+            alerta.classList.remove('d-none');
+            alerta.classList.remove('alert-success');
+            alerta.classList.add('alert-danger');
+            alerta.classList.add('show');
+            setTimeout(() => {
+                alerta.classList.remove('show');
+                alerta.classList.add('d-none');
+                alerta.classList.remove('alert-danger');
+                alerta.classList.add('alert-success');
+                alerta.textContent = '¡Producto agregado!';
+            }, 2000);
+            return;
+        }
+        
         const existente = productosVenta.find(p => p.id == productoId);
         if (existente) {
             let alerta = document.getElementById('alerta-producto');
