@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('compras', function (Blueprint $table) {
             $table->id();
             $table->foreignId('proveedor_id')->constrained('proveedores')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->dateTime('fecha')->useCurrent();
-            $table->decimal('total', 10, 2);
+            $table->dateTime('fecha')->useCurrent()->nullable(false);
+            $table->decimal('total', 10, 2)->nullable(false);
             $table->timestamps();
+            
+            $table->index('fecha');
+            $table->index('total');
         });
     }
 

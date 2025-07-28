@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cliente;
+use Illuminate\Support\Facades\Validator;
 
 class ClienteController extends Controller
 {
-    //Lista de clientes
     public function index(Request $request)
     {
         $query = Cliente::query();
@@ -25,11 +25,53 @@ class ClienteController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nombre' => 'required|string|max:100',
-            'telefono' => 'nullable|string|max:20',
-            'direccion' => 'nullable|string|max:255',
+        $validated = $request->validate(Cliente::$rules);
+
+        $validator = Validator::make($validated, [
+            'nombre' => [
+                'required',
+                'string',
+                'max:100',
+                'min:2',
+                function ($attribute, $value, $fail) {
+                    if (trim($value) === '') {
+                        $fail('El nombre del cliente no puede estar vacío.');
+                    }
+                    
+                    if (Cliente::where('nombre', trim($value))->exists()) {
+                        $fail('Ya existe un cliente con este nombre.');
+                    }
+                },
+            ],
+            'telefono' => [
+                'nullable',
+                'string',
+                'max:20',
+                'regex:/^[0-9\-\+\(\)\s]+$/',
+                function ($attribute, $value, $fail) {
+                    if ($value && strlen(trim($value)) < 7) {
+                        $fail('El teléfono debe tener al menos 7 dígitos.');
+                    }
+                },
+            ],
+            'direccion' => [
+                'nullable',
+                'string',
+                'max:255',
+                'min:5',
+                function ($attribute, $value, $fail) {
+                    if ($value && trim($value) === '') {
+                        $fail('La dirección no puede estar vacía si se proporciona.');
+                    }
+                },
+            ],
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         Cliente::create($validated);
         return redirect()->route('clientes.index')->with('success', 'Cliente creado correctamente.');
@@ -50,11 +92,57 @@ class ClienteController extends Controller
     public function update(Request $request, string $id)
     {
         $cliente = Cliente::findOrFail($id);
-        $validated = $request->validate([
-            'nombre' => 'required|string|max:100',
-            'telefono' => 'nullable|string|max:20',
-            'direccion' => 'nullable|string|max:255',
+        
+        $validated = $request->validate(Cliente::$rulesUpdate);
+
+        $validator = Validator::make($validated, [
+            'nombre' => [
+                'sometimes',
+                'required',
+                'string',
+                'max:100',
+                'min:2',
+                function ($attribute, $value, $fail) use ($cliente) {
+                    if (trim($value) === '') {
+                        $fail('El nombre del cliente no puede estar vacío.');
+                    }
+                    
+                    if (Cliente::where('nombre', trim($value))
+                        ->where('id', '!=', $cliente->id)
+                        ->exists()) {
+                        $fail('Ya existe otro cliente con este nombre.');
+                    }
+                },
+            ],
+            'telefono' => [
+                'nullable',
+                'string',
+                'max:20',
+                'regex:/^[0-9\-\+\(\)\s]+$/',
+                function ($attribute, $value, $fail) {
+                    if ($value && strlen(trim($value)) < 7) {
+                        $fail('El teléfono debe tener al menos 7 dígitos.');
+                    }
+                },
+            ],
+            'direccion' => [
+                'nullable',
+                'string',
+                'max:255',
+                'min:5',
+                function ($attribute, $value, $fail) {
+                    if ($value && trim($value) === '') {
+                        $fail('La dirección no puede estar vacía si se proporciona.');
+                    }
+                },
+            ],
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         $cliente->update($validated);
 

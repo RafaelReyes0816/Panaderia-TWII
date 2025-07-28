@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('ventas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('cliente_id')->nullable()->constrained('clientes')->nullOnDelete()->cascadeOnUpdate();
-            $table->dateTime('fecha')->useCurrent();
-            $table->decimal('total', 10, 2);
+            $table->dateTime('fecha')->useCurrent()->nullable(false);
+            $table->decimal('total', 10, 2)->nullable(false);
             $table->timestamps();
+            
+            $table->index('fecha');
+            $table->index('total');
         });
     }
 
