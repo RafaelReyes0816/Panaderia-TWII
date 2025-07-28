@@ -15,12 +15,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Models\DetalleVenta;
 use App\Models\DetalleCompra;
 
-
-
-
-//Rutas protegidas para empleados
 Route::middleware('auth')->group(function () {
-    //Ruta productos (empleados)
     Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
 Route::get('/productos/crear', [ProductoController::class, 'create'])->name('productos.create');
 Route::post('/productos', [ProductoController::class, 'store'])->name('productos.store');
@@ -29,8 +24,6 @@ Route::get('/productos/{id}/editar', [ProductoController::class, 'edit'])->name(
 Route::put('/productos/{id}', [ProductoController::class, 'update'])->name('productos.update');
 Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])->name('productos.destroy');
 
-
-//Ruta deproveedores
 Route::get('/proveedores', [ProveedorController::class, 'index'])->name('proveedores.index');
 Route::get('/proveedores/crear', [ProveedorController::class, 'create'])->name('proveedores.create');
 Route::post('/proveedores', [ProveedorController::class, 'store'])->name('proveedores.store');
@@ -39,8 +32,6 @@ Route::get('/proveedores/{id}/editar', [ProveedorController::class, 'edit'])->na
 Route::put('/proveedores/{id}', [ProveedorController::class, 'update'])->name('proveedores.update');
 Route::delete('/proveedores/{id}', [ProveedorController::class, 'destroy'])->name('proveedores.destroy');
 
-
-//Ruta de compras
 Route::get('/compras', [CompraController::class, 'index'])->name('compras.index');
 Route::get('/compras/crear', [CompraController::class, 'create'])->name('compras.create');
 Route::post('/compras', [CompraController::class, 'store'])->name('compras.store');
@@ -49,8 +40,6 @@ Route::get('/compras/{id}/editar', [CompraController::class, 'edit'])->name('com
 Route::put('/compras/{id}', [CompraController::class, 'update'])->name('compras.update');
 Route::delete('/compras/{id}', [CompraController::class, 'destroy'])->name('compras.destroy');
 
-
-//Ruta de ventas
 Route::get('/ventas', [VentaController::class, 'index'])->name('ventas.index');
 Route::get('/ventas/crear', [VentaController::class, 'create'])->name('ventas.create');
 Route::post('/ventas', [VentaController::class, 'store'])->name('ventas.store');
@@ -59,8 +48,6 @@ Route::get('/ventas/{id}/editar', [VentaController::class, 'edit'])->name('venta
 Route::put('/ventas/{id}', [VentaController::class, 'update'])->name('ventas.update');
 Route::delete('/ventas/{id}', [VentaController::class, 'destroy'])->name('ventas.destroy');
 
-
-//Rutas de clientes
 Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
 Route::get('/clientes/crear', [ClienteController::class, 'create'])->name('clientes.create');
 Route::post('/clientes', [ClienteController::class, 'store'])->name('clientes.store');
@@ -69,10 +56,7 @@ Route::get('/clientes/{id}/editar', [ClienteController::class, 'edit'])->name('c
 Route::put('/clientes/{id}', [ClienteController::class, 'update'])->name('clientes.update');
 Route::delete('/clientes/{id}', [ClienteController::class, 'destroy'])->name('clientes.destroy');
 
-
-//Ruta de Inventario
 Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario.index');
-
 
 Route::get('detalle-compras', [DetalleCompraController::class, 'index'])->name('detalle-compras.index');
 Route::get('detalle-ventas', [DetalleVentaController::class, 'index'])->name('detalle-ventas.index');
@@ -90,12 +74,10 @@ Route::get('/detalles', function (\Illuminate\Http\Request $request) {
 })->name('detalles.index');
 });
 
-//Ruta de visitantes
 Route::get('/', [VisitanteController::class, 'index'])->name('inicio');
 Route::get('/menu', [VisitanteController::class, 'productos'])->name('visitantes.menu');
 Route::get('/contacto', [VisitanteController::class, 'contacto'])->name('visitantes.contacto');
 
-//Rutas de autenticación
 Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

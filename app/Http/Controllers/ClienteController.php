@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cliente;
-use Illuminate\Support\Facades\Validator;
 
 class ClienteController extends Controller
 {
@@ -25,48 +24,14 @@ class ClienteController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nombre' => [
-                'required',
-                'string',
-                'max:100',
-                'min:2',
-                function ($attribute, $value, $fail) {
-                    if (trim($value) === '') {
-                        $fail('El nombre del cliente no puede estar vacío.');
-                    }
-                    
-                    if (Cliente::where('nombre', trim($value))->exists()) {
-                        $fail('Ya existe un cliente con este nombre.');
-                    }
-                },
-            ],
-            'telefono' => [
-                'nullable',
-                'string',
-                'max:20',
-                'regex:/^[0-9\-\+\(\)\s]+$/',
-                function ($attribute, $value, $fail) {
-                    if ($value && strlen(trim($value)) < 7) {
-                        $fail('El teléfono debe tener al menos 7 dígitos.');
-                    }
-                },
-            ],
-            'direccion' => [
-                'nullable',
-                'string',
-                'max:255',
-                'min:5',
-                function ($attribute, $value, $fail) {
-                    if ($value && trim($value) === '') {
-                        $fail('La dirección no puede estar vacía si se proporciona.');
-                    }
-                },
-            ],
-        ]);
-
-        Cliente::create($request->all());
-        return redirect()->route('clientes.index')->with('success', 'Cliente creado correctamente.');
+        try {
+            Cliente::create($request->all());
+            return redirect()->route('clientes.index')->with('success', 'Cliente creado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Error al crear el cliente: ' . $e->getMessage());
+        }
     }
 
     public function show(string $id)
@@ -85,52 +50,14 @@ class ClienteController extends Controller
     {
         $cliente = Cliente::findOrFail($id);
         
-        $request->validate([
-            'nombre' => [
-                'sometimes',
-                'required',
-                'string',
-                'max:100',
-                'min:2',
-                function ($attribute, $value, $fail) use ($cliente) {
-                    if (trim($value) === '') {
-                        $fail('El nombre del cliente no puede estar vacío.');
-                    }
-                    
-                    if (Cliente::where('nombre', trim($value))
-                        ->where('id', '!=', $cliente->id)
-                        ->exists()) {
-                        $fail('Ya existe otro cliente con este nombre.');
-                    }
-                },
-            ],
-            'telefono' => [
-                'nullable',
-                'string',
-                'max:20',
-                'regex:/^[0-9\-\+\(\)\s]+$/',
-                function ($attribute, $value, $fail) {
-                    if ($value && strlen(trim($value)) < 7) {
-                        $fail('El teléfono debe tener al menos 7 dígitos.');
-                    }
-                },
-            ],
-            'direccion' => [
-                'nullable',
-                'string',
-                'max:255',
-                'min:5',
-                function ($attribute, $value, $fail) {
-                    if ($value && trim($value) === '') {
-                        $fail('La dirección no puede estar vacía si se proporciona.');
-                    }
-                },
-            ],
-        ]);
-
-        $cliente->update($request->all());
-
-        return redirect()->route('clientes.index')->with('success', 'Cliente actualizado correctamente.');
+        try {
+            $cliente->update($request->all());
+            return redirect()->route('clientes.index')->with('success', 'Cliente actualizado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Error al actualizar el cliente: ' . $e->getMessage());
+        }
     }
 
     public function destroy(string $id)

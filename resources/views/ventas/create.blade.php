@@ -120,7 +120,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const cantidad = parseInt(document.getElementById('cantidad-input').value) || 1;
         if (!productoId || !productosData[productoId]) return;
         
-        // Verificar stock disponible
         if (cantidad > productosData[productoId].stock) {
             let alerta = document.getElementById('alerta-producto');
             alerta.textContent = 'Stock insuficiente. Disponible: ' + productosData[productoId].stock;

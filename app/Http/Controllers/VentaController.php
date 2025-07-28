@@ -12,7 +12,6 @@ use App\Models\Inventario;
 
 class VentaController extends Controller
 {
-    //Lista
     public function index(Request $request)
     {
         $query = \App\Models\Venta::with('cliente');
@@ -44,7 +43,6 @@ class VentaController extends Controller
             'cantidades.*' => 'integer|min:1',
         ]);
 
-        // Verificar stock disponible antes de procesar
         $productosSinStock = [];
         foreach ($validated['productos'] as $index => $productoId) {
             $cantidad = $validated['cantidades'][$index];
@@ -61,20 +59,17 @@ class VentaController extends Controller
                 ->with('error', 'Stock insuficiente para: ' . implode(', ', $productosSinStock));
         }
 
-        // Crear la venta
         $venta = Venta::create([
             'cliente_id' => $validated['cliente_id'],
             'fecha' => $validated['fecha'],
             'total' => $validated['total'],
         ]);
 
-        // Procesar cada producto de la venta
         foreach ($validated['productos'] as $index => $productoId) {
             $cantidad = $validated['cantidades'][$index];
             $producto = Producto::find($productoId);
             
             if ($producto) {
-                // Crear detalle de venta
                 $detalle = DetalleVenta::create([
                     'venta_id' => $venta->id,
                     'producto_id' => $productoId,
@@ -82,7 +77,6 @@ class VentaController extends Controller
                     'subtotal' => $producto->precio * $cantidad,
                 ]);
 
-                // Registrar movimiento de inventario (salida)
                 Inventario::create([
                     'producto_id' => $productoId,
                     'tipo_movimiento' => 'salida',
@@ -91,7 +85,6 @@ class VentaController extends Controller
                     'observacion' => 'Venta #' . $venta->id,
                 ]);
 
-                // Actualizar stock del producto
                 $producto->stock = max(0, $producto->stock - $cantidad);
                 $producto->save();
             }
@@ -113,7 +106,6 @@ class VentaController extends Controller
         return view('ventas.edit', compact('venta', 'clientes'));
     }
 
-    //Actualización
     public function update(Request $request, string $id)
     {
         $venta = Venta::findOrFail($id);

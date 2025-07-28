@@ -14,7 +14,7 @@ class Proveedor extends Model
 
     public static $rules = [
         'nombre' => 'required|string|max:100|min:2',
-        'telefono' => 'nullable|string|max:20|regex:/^[0-9\-\+\(\)\s]+$/',
+        'telefono' => 'required|string|max:20|regex:/^[0-9\-\+\(\)\s]+$/',
         'direccion' => 'nullable|string|max:255|min:5',
         'contacto' => 'nullable|string|max:100|min:2',
     ];

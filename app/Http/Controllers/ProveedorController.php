@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Proveedor;
-use Illuminate\Support\Facades\Validator;
 
 class ProveedorController extends Controller
 {
@@ -25,59 +24,14 @@ class ProveedorController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nombre' => [
-                'required',
-                'string',
-                'max:100',
-                'min:2',
-                function ($attribute, $value, $fail) {
-                    if (trim($value) === '') {
-                        $fail('El nombre del proveedor no puede estar vacío.');
-                    }
-                    
-                    if (Proveedor::where('nombre', trim($value))->exists()) {
-                        $fail('Ya existe un proveedor con este nombre.');
-                    }
-                },
-            ],
-            'telefono' => [
-                'nullable',
-                'string',
-                'max:20',
-                'regex:/^[0-9\-\+\(\)\s]+$/',
-                function ($attribute, $value, $fail) {
-                    if ($value && strlen(trim($value)) < 7) {
-                        $fail('El teléfono debe tener al menos 7 dígitos.');
-                    }
-                },
-            ],
-            'direccion' => [
-                'nullable',
-                'string',
-                'max:255',
-                'min:5',
-                function ($attribute, $value, $fail) {
-                    if ($value && trim($value) === '') {
-                        $fail('La dirección no puede estar vacía si se proporciona.');
-                    }
-                },
-            ],
-            'contacto' => [
-                'nullable',
-                'string',
-                'max:100',
-                'min:2',
-                function ($attribute, $value, $fail) {
-                    if ($value && trim($value) === '') {
-                        $fail('El contacto no puede estar vacío si se proporciona.');
-                    }
-                },
-            ],
-        ]);
-
-        Proveedor::create($request->all());
-        return redirect()->route('proveedores.index')->with('success', 'Proveedor creado correctamente.');
+        try {
+            Proveedor::create($request->all());
+            return redirect()->route('proveedores.index')->with('success', 'Proveedor creado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Error al crear el proveedor: ' . $e->getMessage());
+        }
     }
 
     public function show(string $id)
@@ -96,62 +50,14 @@ class ProveedorController extends Controller
     {
         $proveedor = Proveedor::findOrFail($id);
         
-        $request->validate([
-            'nombre' => [
-                'sometimes',
-                'required',
-                'string',
-                'max:100',
-                'min:2',
-                function ($attribute, $value, $fail) use ($proveedor) {
-                    if (trim($value) === '') {
-                        $fail('El nombre del proveedor no puede estar vacío.');
-                    }
-                    
-                    if (Proveedor::where('nombre', trim($value))
-                        ->where('id', '!=', $proveedor->id)
-                        ->exists()) {
-                        $fail('Ya existe otro proveedor con este nombre.');
-                    }
-                },
-            ],
-            'telefono' => [
-                'nullable',
-                'string',
-                'max:20',
-                'regex:/^[0-9\-\+\(\)\s]+$/',
-                function ($attribute, $value, $fail) {
-                    if ($value && strlen(trim($value)) < 7) {
-                        $fail('El teléfono debe tener al menos 7 dígitos.');
-                    }
-                },
-            ],
-            'direccion' => [
-                'nullable',
-                'string',
-                'max:255',
-                'min:5',
-                function ($attribute, $value, $fail) {
-                    if ($value && trim($value) === '') {
-                        $fail('La dirección no puede estar vacía si se proporciona.');
-                    }
-                },
-            ],
-            'contacto' => [
-                'nullable',
-                'string',
-                'max:100',
-                'min:2',
-                function ($attribute, $value, $fail) {
-                    if ($value && trim($value) === '') {
-                        $fail('El contacto no puede estar vacío si se proporciona.');
-                    }
-                },
-            ],
-        ]);
-
-        $proveedor->update($request->all());
-        return redirect()->route('proveedores.index')->with('success', 'Proveedor actualizado correctamente.');
+        try {
+            $proveedor->update($request->all());
+            return redirect()->route('proveedores.index')->with('success', 'Proveedor actualizado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Error al actualizar el proveedor: ' . $e->getMessage());
+        }
     }
 
     public function destroy(string $id)

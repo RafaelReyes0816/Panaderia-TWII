@@ -189,24 +189,21 @@ function contactarProducto(nombre) {
     window.open(whatsapp, '_blank');
 }
 
-// Búsqueda con delay para evitar demasiadas peticiones
-document.addEventListener('DOMContentLoaded', function() {
-    const buscarInput = document.getElementById('buscar');
-    let timeoutId;
-    
-    buscarInput.addEventListener('input', function() {
-        clearTimeout(timeoutId);
+    document.addEventListener('DOMContentLoaded', function() {
+        const buscarInput = document.getElementById('buscar');
+        let timeoutId;
         
-        // Mostrar indicador de búsqueda
-        document.getElementById('buscando').style.display = 'block';
+        buscarInput.addEventListener('input', function() {
+            clearTimeout(timeoutId);
+            
+            document.getElementById('buscando').style.display = 'block';
+            
+            timeoutId = setTimeout(function() {
+                document.getElementById('form-busqueda').submit();
+            }, 500);
+        });
         
-        timeoutId = setTimeout(function() {
-            document.getElementById('form-busqueda').submit();
-        }, 500); // Espera 500ms después de que el usuario deje de escribir
-    });
-    
-    // Función para limpiar búsqueda
-    window.limpiarBusqueda = function() {
+        window.limpiarBusqueda = function() {
         buscarInput.value = '';
         document.getElementById('filtro_stock').value = '';
                  window.location.href = '{{ route("visitantes.menu") }}';

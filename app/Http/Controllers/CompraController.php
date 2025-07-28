@@ -11,7 +11,6 @@ use App\Models\Inventario;
 
 class CompraController extends Controller
 {
-    //tabla
     public function index(Request $request)
     {
         $query = \App\Models\Compra::with('proveedor');
@@ -31,7 +30,6 @@ class CompraController extends Controller
         return view('compras.create', compact('proveedores', 'productos'));
     }
 
-    //Validación
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -46,7 +44,6 @@ class CompraController extends Controller
             'precios_unitarios.*' => 'numeric|min:0',
         ]);
 
-        //Crear la compra
         $compra = Compra::create([
             'proveedor_id' => $validated['proveedor_id'],
             'fecha' => $validated['fecha'],

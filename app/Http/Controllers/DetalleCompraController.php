@@ -9,7 +9,6 @@ use App\Models\Producto;
 
 class DetalleCompraController extends Controller
 {
-    //Lista
     public function index()
     {
         $detalles = DetalleCompra::with(['compra', 'producto'])->get();

@@ -22,7 +22,6 @@ class VisitanteController extends Controller
     {
         $query = Producto::where('stock', '>', 0);
         
-        // Búsqueda por nombre o descripción
         if ($request->filled('buscar')) {
             $buscar = $request->buscar;
             $query->where(function($q) use ($buscar) {
@@ -31,7 +30,6 @@ class VisitanteController extends Controller
             });
         }
         
-        // Filtro por disponibilidad
         if ($request->filled('filtro_stock')) {
             switch ($request->filtro_stock) {
                 case 'disponible':

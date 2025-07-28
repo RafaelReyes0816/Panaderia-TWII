@@ -22,7 +22,7 @@ Este proyecto es un sistema de gestión para una panadería, desarrollado en Lar
 
 ### Resumen de Validaciones Implementadas
 
-El sistema cuenta con validaciones robustas tanto a nivel de base de datos como a nivel de aplicación, con mensajes de error en español.
+El sistema cuenta con validaciones robustas a nivel de base de datos, con mensajes de error nativos del sistema de gestión de base de datos.
 
 #### 1. Validaciones a Nivel de Base de Datos (Migraciones)
 
@@ -35,12 +35,12 @@ El sistema cuenta con validaciones robustas tanto a nivel de base de datos como 
 
 **Tabla `clientes`:**
 - `nombre`: NOT NULL, VARCHAR(100)
-- `telefono`: NULLABLE, VARCHAR(20)
+- `telefono`: NOT NULL, VARCHAR(20) ← **OBLIGATORIO**
 - `direccion`: NULLABLE, VARCHAR(255)
 
 **Tabla `proveedores`:**
 - `nombre`: NOT NULL, VARCHAR(100)
-- `telefono`: NULLABLE, VARCHAR(20)
+- `telefono`: NOT NULL, VARCHAR(20) ← **OBLIGATORIO**
 - `direccion`: NULLABLE, VARCHAR(255)
 - `contacto`: NULLABLE, VARCHAR(100)
 
@@ -71,7 +71,7 @@ public static $rules = [
 ```php
 public static $rules = [
     'nombre' => 'required|string|max:100|min:2',
-    'telefono' => 'nullable|string|max:20|regex:/^[0-9\-\+\(\)\s]+$/',
+    'telefono' => 'required|string|max:20|regex:/^[0-9\-\+\(\)\s]+$/',
     'direccion' => 'nullable|string|max:255|min:5',
 ];
 ```
@@ -80,7 +80,7 @@ public static $rules = [
 ```php
 public static $rules = [
     'nombre' => 'required|string|max:100|min:2',
-    'telefono' => 'nullable|string|max:20|regex:/^[0-9\-\+\(\)\s]+$/',
+    'telefono' => 'required|string|max:20|regex:/^[0-9\-\+\(\)\s]+$/',
     'direccion' => 'nullable|string|max:255|min:5',
     'contacto' => 'nullable|string|max:100|min:2',
 ];
@@ -109,7 +109,7 @@ public static $rules = [
 - Formato: números, guiones, paréntesis, espacios
 - Mínimo 7 dígitos
 - Máximo 20 caracteres
-- Opcional (nullable)
+- **OBLIGATORIO** para clientes y proveedores
 
 **Direcciones:**
 - Mínimo 5 caracteres
@@ -127,16 +127,14 @@ public static $rules = [
 - Máximo 999,999
 - Se actualiza automáticamente con ventas/compras
 
-#### 5. Mensajes de Error Personalizados
+#### 5. Mensajes de Error
 
-Todos los mensajes de error están en español y son descriptivos:
+Los mensajes de error son nativos de la base de datos MySQL:
 
-- "El nombre del producto no puede estar vacío."
-- "Ya existe un producto con este nombre."
-- "El precio debe ser mayor a 0."
-- "El teléfono debe tener al menos 7 dígitos."
-- "La dirección no puede estar vacía si se proporciona."
-- "Stock insuficiente para: [producto]"
+- "Column 'telefono' cannot be null"
+- "Column 'nombre' cannot be null"
+- "Data too long for column 'nombre'"
+- "Duplicate entry for key 'nombre'"
 
 #### 6. Validaciones en Controladores
 
@@ -145,12 +143,12 @@ Todos los mensajes de error están en español y son descriptivos:
 - **Actualizar**: Valida nombre único (excluyendo el registro actual)
 
 **ClienteController:**
-- **Crear**: Valida nombre único, teléfono válido, dirección válida
-- **Actualizar**: Valida nombre único (excluyendo el registro actual)
+- **Crear**: Sin validaciones del servidor (validación a nivel de base de datos)
+- **Actualizar**: Sin validaciones del servidor (validación a nivel de base de datos)
 
 **ProveedorController:**
-- **Crear**: Valida nombre único, teléfono válido, dirección válida, contacto válido
-- **Actualizar**: Valida nombre único (excluyendo el registro actual)
+- **Crear**: Sin validaciones del servidor (validación a nivel de base de datos)
+- **Actualizar**: Sin validaciones del servidor (validación a nivel de base de datos)
 
 **VentaController:**
 - Valida stock disponible antes de procesar venta
@@ -181,14 +179,14 @@ Todos los mensajes de error están en español y son descriptivos:
    ```bash
    cp .env.example .env
    ```
-   Luego edita el archivo `.env` y configura los datos de tu base de datos y otros parámetros necesarios.
+   Luego edita el archivo `.env` y configura los datos de tu base de datos MySQL y otros parámetros necesarios.
 
 4. **Genera la clave de la aplicación**
    ```bash
    php artisan key:generate
    ```
 
-5. **Crea la base de datos en tu gestor (MySQL, MariaDB, etc.)**  
+5. **Crea la base de datos MySQL**  
    Asegúrate de que el nombre coincida con el que pusiste en el `.env`.
 
 6. **Ejecuta las migraciones para crear las tablas**
@@ -253,8 +251,51 @@ php artisan route:list
 
 ---
 
+## 🧪 **Cómo Probar las Validaciones:**
+
+### **1. Crear Proveedor sin Teléfono:**
+- Ve a http://localhost:8000/proveedores/create
+- Deja el teléfono vacío
+- Envía el formulario
+- **Resultado**: Error de MySQL "Column 'telefono' cannot be null"
+
+### **2. Crear Cliente sin Teléfono:**
+- Ve a http://localhost:8000/clientes/create
+- Deja el teléfono vacío
+- Envía el formulario
+- **Resultado**: Error de MySQL "Column 'telefono' cannot be null"
+
+### **3. Crear Cliente sin Nombre:**
+- Ve a http://localhost:8000/clientes/create
+- Deja el nombre vacío
+- Envía el formulario
+- **Resultado**: Error de MySQL "Column 'nombre' cannot be null"
+
+## ✅ **Ventajas del Enfoque Actual:**
+
+1. **Consistencia**: La base de datos es la fuente única de verdad
+2. **Rendimiento**: Menos validaciones en el servidor
+3. **Simplicidad**: Código más limpio y mantenible
+4. **Integridad**: Garantía de que los datos cumplen las reglas
+5. **Escalabilidad**: Fácil agregar nuevas restricciones
+
+## 📋 **Campos Obligatorios:**
+
+### **Cliente:**
+- ✅ Nombre (obligatorio)
+- ✅ **Teléfono (obligatorio)**
+- ❌ Dirección (opcional)
+
+### **Proveedor:**
+- ✅ Nombre (obligatorio)
+- ✅ Teléfono (obligatorio)
+- ❌ Dirección (opcional)
+- ❌ Contacto (opcional)
+
+---
+
 > **Nota:**  
 > Este proyecto incluye la estructura de base de datos (migraciones), modelos Eloquent, factories, seeders, controladores y vistas web para los módulos principales.  
 > Al levantar el servidor (`php artisan serve`) podrás acceder a la interfaz web para gestionar la panadería desde el navegador.
 > 
-> **Sistema de validaciones robusto**: El proyecto cuenta con validaciones completas tanto del lado del cliente como del servidor, con mensajes de error claros en español que ayudan a los usuarios a corregir los datos ingresados correctamente.
+> **Sistema de validaciones robusto**: El proyecto cuenta con validaciones a nivel de base de datos MySQL, con mensajes de error nativos que garantizan la integridad de los datos.
