@@ -31,12 +31,6 @@
                         <td>Bs {{ number_format($compra->total, 2) }}</td>
                         <td>
                             <a href="{{ route('compras.show', $compra->id) }}" class="btn btn-info btn-sm">Ver</a>
-                            <a href="{{ route('compras.edit', $compra->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                            <form action="{{ route('compras.destroy', $compra->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta compra?')">Eliminar</button>
-                            </form>
                         </td>
                     </tr>
                 @empty

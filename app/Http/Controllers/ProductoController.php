@@ -28,9 +28,7 @@ class ProductoController extends Controller
     
     public function store(Request $request)
     {
-        $validated = $request->validate(Producto::$rules);
-
-        $validator = Validator::make($validated, [
+        $validator = Validator::make($request->all(), [
             'nombre' => [
                 'required',
                 'string',
@@ -46,6 +44,7 @@ class ProductoController extends Controller
                     }
                 },
             ],
+            'descripcion' => 'nullable|string|max:1000',
             'precio' => [
                 'required',
                 'numeric',
@@ -63,6 +62,7 @@ class ProductoController extends Controller
                 'min:0',
                 'max:999999',
             ],
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -70,6 +70,8 @@ class ProductoController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('imagen')) {
             $imagen = $request->file('imagen');
@@ -109,9 +111,7 @@ class ProductoController extends Controller
     {
         $producto = Producto::findOrFail($id);
         
-        $validated = $request->validate(Producto::$rulesUpdate);
-
-        $validator = Validator::make($validated, [
+        $validator = Validator::make($request->all(), [
             'nombre' => [
                 'sometimes',
                 'required',
@@ -130,6 +130,7 @@ class ProductoController extends Controller
                     }
                 },
             ],
+            'descripcion' => 'nullable|string|max:1000',
             'precio' => [
                 'sometimes',
                 'required',
@@ -149,6 +150,7 @@ class ProductoController extends Controller
                 'min:0',
                 'max:999999',
             ],
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -156,6 +158,8 @@ class ProductoController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('imagen')) {
             $imagen = $request->file('imagen');

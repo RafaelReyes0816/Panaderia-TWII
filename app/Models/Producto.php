@@ -18,7 +18,7 @@ class Producto extends Model
         'descripcion' => 'nullable|string|max:1000',
         'precio' => 'required|numeric|min:0|max:999999.99',
         'stock' => 'required|integer|min:0|max:999999',
-        'imagen' => 'nullable|string|max:255',
+        'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
     ];
 
     public static $rulesUpdate = [
@@ -26,7 +26,7 @@ class Producto extends Model
         'descripcion' => 'nullable|string|max:1000',
         'precio' => 'sometimes|required|numeric|min:0|max:999999.99',
         'stock' => 'sometimes|required|integer|min:0|max:999999',
-        'imagen' => 'nullable|string|max:255',
+        'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
     ];
 
     public function setNombreAttribute($value)

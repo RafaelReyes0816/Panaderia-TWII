@@ -37,12 +37,6 @@
                         <td>Bs {{ number_format($venta->total, 2) }}</td>
                         <td>
                             <a href="{{ route('ventas.show', $venta->id) }}" class="btn btn-info btn-sm">Ver</a>
-                            <a href="{{ route('ventas.edit', $venta->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                            <form action="{{ route('ventas.destroy', $venta->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta venta?')">Eliminar</button>
-                            </form>
                         </td>
                     </tr>
                 @empty
