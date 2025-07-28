@@ -25,9 +25,7 @@ class ClienteController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate(Cliente::$rules);
-
-        $validator = Validator::make($validated, [
+        $request->validate([
             'nombre' => [
                 'required',
                 'string',
@@ -67,13 +65,7 @@ class ClienteController extends Controller
             ],
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        Cliente::create($validated);
+        Cliente::create($request->all());
         return redirect()->route('clientes.index')->with('success', 'Cliente creado correctamente.');
     }
 
@@ -93,9 +85,7 @@ class ClienteController extends Controller
     {
         $cliente = Cliente::findOrFail($id);
         
-        $validated = $request->validate(Cliente::$rulesUpdate);
-
-        $validator = Validator::make($validated, [
+        $request->validate([
             'nombre' => [
                 'sometimes',
                 'required',
@@ -138,13 +128,7 @@ class ClienteController extends Controller
             ],
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        $cliente->update($validated);
+        $cliente->update($request->all());
 
         return redirect()->route('clientes.index')->with('success', 'Cliente actualizado correctamente.');
     }

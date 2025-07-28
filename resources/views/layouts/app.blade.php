@@ -72,20 +72,37 @@
             background-color: #6B3F1D !important;
             color: #FFD700 !important;
         }
+        .logo-container {
+            transition: transform 0.2s ease;
+        }
+        .logo-container:hover {
+            transform: scale(1.05);
+        }
+        .logo-container img {
+            filter: drop-shadow(0 2px 4px rgba(139, 69, 19, 0.3));
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #8B4513;
+        }
     </style>
 </head>
 <body>
     <header class="p-3 mb-4">
         <div class="container">
             <nav class="d-flex justify-content-between align-items-center">
-                <div>
-                    <a class="btn btn-light me-2" href="{{ route('productos.index') }}">Productos</a>
-                    <a class="btn btn-light me-2" href="{{ route('proveedores.index') }}">Proveedores</a>
-                    <a class="btn btn-light me-2" href="{{ route('compras.index') }}">Compras</a>
-                    <a class="btn btn-light me-2" href="{{ route('ventas.index') }}">Ventas</a>
-                    <a class="btn btn-light me-2" href="{{ route('clientes.index') }}">Clientes</a>
-                    <a class="btn btn-light me-2" href="{{ route('inventario.index') }}">Inventario</a>
-                    <a class="btn btn-light me-2" href="{{ route('detalles.index') }}">Reportes</a>
+                <div class="d-flex align-items-center">
+                    <a href="{{ route('productos.index') }}" class="me-3 logo-container">
+                        <img src="{{ asset('images/WhatsApp Image 2025-07-28 at 3.55.10 PM.jpeg') }}" alt="PAN Y PUNTO" style="height: 50px; width: auto;">
+                    </a>
+                    <div>
+                        <a class="btn btn-light me-2" href="{{ route('productos.index') }}">Productos</a>
+                        <a class="btn btn-light me-2" href="{{ route('clientes.index') }}">Clientes</a>
+                        <a class="btn btn-light me-2" href="{{ route('proveedores.index') }}">Proveedores</a>
+                        <a class="btn btn-light me-2" href="{{ route('compras.index') }}">Compras</a>
+                        <a class="btn btn-light me-2" href="{{ route('ventas.index') }}">Ventas</a>
+                        <a class="btn btn-light me-2" href="{{ route('detalles.index') }}">Reportes</a>
+                        <a class="btn btn-light me-2" href="{{ route('inventario.index') }}">Inventario</a>
+                    </div>
                 </div>
                 <div>
                     <form method="POST" action="{{ route('logout') }}" class="d-inline">

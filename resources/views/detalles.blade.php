@@ -12,7 +12,7 @@
         <h3 class="mb-3">Detalles de Ventas</h3>
         <div class="table-responsive p-2">
             <table class="table table-bordered align-middle">
-                <thead>
+                <thead class="table-dark">
                     <tr>
                         <th>ID</th>
                         <th>Venta ID</th>
@@ -86,7 +86,7 @@
         <h3 class="mb-3">Detalles de Compras</h3>
         <div class="table-responsive p-2">
             <table class="table table-bordered align-middle">
-                <thead>
+                <thead class="table-dark">
                     <tr>
                         <th>ID</th>
                         <th>Compra ID</th>

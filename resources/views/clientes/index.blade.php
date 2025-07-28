@@ -19,7 +19,7 @@
 
     <div class="table-responsive">
         <table class="table table-bordered table-striped align-middle" style="padding: 1rem;">
-            <thead>
+            <thead class="table-dark">
                 <tr>
                     <th>#</th>
                     <th>Nombre</th>
@@ -36,6 +36,7 @@
                         <td>{{ $cliente->telefono }}</td>
                         <td>{{ $cliente->direccion }}</td>
                         <td>
+                            <a href="{{ route('clientes.show', $cliente->id) }}" class="btn btn-info btn-sm">Ver</a>
                             <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn btn-primary btn-sm">Editar</a>
                             <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" style="display:inline-block;">
                                 @csrf

@@ -25,9 +25,7 @@ class ProveedorController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate(Proveedor::$rules);
-
-        $validator = Validator::make($validated, [
+        $request->validate([
             'nombre' => [
                 'required',
                 'string',
@@ -78,13 +76,7 @@ class ProveedorController extends Controller
             ],
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        Proveedor::create($validated);
+        Proveedor::create($request->all());
         return redirect()->route('proveedores.index')->with('success', 'Proveedor creado correctamente.');
     }
 
@@ -104,9 +96,7 @@ class ProveedorController extends Controller
     {
         $proveedor = Proveedor::findOrFail($id);
         
-        $validated = $request->validate(Proveedor::$rulesUpdate);
-
-        $validator = Validator::make($validated, [
+        $request->validate([
             'nombre' => [
                 'sometimes',
                 'required',
@@ -160,13 +150,7 @@ class ProveedorController extends Controller
             ],
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        $proveedor->update($validated);
+        $proveedor->update($request->all());
         return redirect()->route('proveedores.index')->with('success', 'Proveedor actualizado correctamente.');
     }
 

@@ -19,7 +19,7 @@
 
     <div class="table-responsive">
         <table class="table table-bordered table-striped align-middle" style="padding: 1rem;">
-            <thead>
+            <thead class="table-dark">
                 <tr>
                     <th>#</th>
                     <th>Imagen</th>
