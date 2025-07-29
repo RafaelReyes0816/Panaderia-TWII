@@ -7,7 +7,6 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Detalles de la Venta #{{ $venta->id }}</h2>
                 <div>
-                    <a href="{{ route('ventas.edit', $venta->id) }}" class="btn btn-primary">Editar</a>
                     <a href="{{ route('ventas.index') }}" class="btn btn-secondary">Volver</a>
                 </div>
             </div>

@@ -36,16 +36,12 @@ Route::get('/compras', [CompraController::class, 'index'])->name('compras.index'
 Route::get('/compras/crear', [CompraController::class, 'create'])->name('compras.create');
 Route::post('/compras', [CompraController::class, 'store'])->name('compras.store');
 Route::get('/compras/{id}', [CompraController::class, 'show'])->name('compras.show');
-Route::get('/compras/{id}/editar', [CompraController::class, 'edit'])->name('compras.edit');
-Route::put('/compras/{id}', [CompraController::class, 'update'])->name('compras.update');
 Route::delete('/compras/{id}', [CompraController::class, 'destroy'])->name('compras.destroy');
 
 Route::get('/ventas', [VentaController::class, 'index'])->name('ventas.index');
 Route::get('/ventas/crear', [VentaController::class, 'create'])->name('ventas.create');
 Route::post('/ventas', [VentaController::class, 'store'])->name('ventas.store');
 Route::get('/ventas/{id}', [VentaController::class, 'show'])->name('ventas.show');
-Route::get('/ventas/{id}/editar', [VentaController::class, 'edit'])->name('ventas.edit');
-Route::put('/ventas/{id}', [VentaController::class, 'update'])->name('ventas.update');
 Route::delete('/ventas/{id}', [VentaController::class, 'destroy'])->name('ventas.destroy');
 
 Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');

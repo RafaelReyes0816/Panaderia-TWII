@@ -85,24 +85,7 @@ class CompraController extends Controller
         return view('compras.show', compact('compra'));
     }
 
-    public function edit(string $id)
-    {
-        $compra = Compra::findOrFail($id);
-        $proveedores = Proveedor::all();
-        return view('compras.edit', compact('compra', 'proveedores'));
-    }
-    
-    public function update(Request $request, string $id)
-    {
-        $compra = Compra::findOrFail($id);
-        $validated = $request->validate([
-            'proveedor_id' => 'required|exists:proveedores,id',
-            'fecha' => 'required|date',
-            'total' => 'required|numeric|min:0',
-        ]);
-        $compra->update($validated);
-        return redirect()->route('compras.index')->with('success', 'Compra actualizada correctamente.');
-    }
+
 
     public function destroy(string $id)
     {

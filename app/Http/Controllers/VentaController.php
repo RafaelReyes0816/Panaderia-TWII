@@ -99,24 +99,7 @@ class VentaController extends Controller
         return view('ventas.show', compact('venta'));
     }
 
-    public function edit(string $id)
-    {
-        $venta = Venta::findOrFail($id);
-        $clientes = Cliente::all();
-        return view('ventas.edit', compact('venta', 'clientes'));
-    }
 
-    public function update(Request $request, string $id)
-    {
-        $venta = Venta::findOrFail($id);
-        $validated = $request->validate([
-            'cliente_id' => 'nullable|exists:clientes,id',
-            'fecha' => 'required|date',
-            'total' => 'required|numeric|min:0',
-        ]);
-        $venta->update($validated);
-        return redirect()->route('ventas.index')->with('success', 'Venta actualizada correctamente.');
-    }
 
     public function destroy(string $id)
     {
